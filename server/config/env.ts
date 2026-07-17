@@ -31,6 +31,10 @@ const envSchema = Joi.object({
   // Redis (recommended for scaling across multiple instances)
   REDIS_URL: Joi.string().uri().optional(),
   REDIS_ENABLED: Joi.boolean().default(false),
+
+  // Groq AI (chat assistant). Vision-capable model so image uploads work.
+  GROQ_API_KEY: Joi.string().optional(),
+  GROQ_MODEL: Joi.string().default("meta-llama/llama-4-scout-17b-16e-instruct"),
 }).unknown(true);
 
 const { value, error } = envSchema.validate(process.env, {
@@ -73,6 +77,11 @@ export const env = {
   redis: {
     enabled: value.REDIS_ENABLED as boolean,
     url: value.REDIS_URL as string | undefined,
+  },
+
+  groq: {
+    apiKey: value.GROQ_API_KEY as string | undefined,
+    model: value.GROQ_MODEL as string,
   },
 };
 
