@@ -1,5 +1,9 @@
 import bcrypt from "bcrypt";
-import { model, models, Schema, type HydratedDocument, type Model } from "mongoose";
+// mongoose is CommonJS; use the default import so this also works when Node
+// loads it as ESM (named imports like `models` break under tsx/Node on deploy).
+import mongoose, { type HydratedDocument, type Model } from "mongoose";
+
+const { model, models, Schema } = mongoose;
 
 export interface IUser {
   fullName: string;
