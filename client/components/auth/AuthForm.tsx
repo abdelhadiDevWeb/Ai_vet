@@ -4,8 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { PawIcon } from "../icons";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+import { API_URL } from "../../lib/api";
 
 type Mode = "register" | "login";
 
@@ -68,7 +67,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
       router.push("/");
       router.refresh();
     } catch {
-      setError("Cannot connect to the server. Make sure the API is running on port 4000.");
+      setError("Cannot reach the server. Please check your connection and try again.");
     } finally {
       setIsSubmitting(false);
     }
