@@ -2,9 +2,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { XIcon } from "../icons";
 
 export const AGENT_AVATAR_SRC = "/agent-avatar.png";
+export const AGENT_AVATAR_FULL_SRC = "/agent-avatar-full.jpg";
 export const AGENT_AVATAR_ALT = "PetCare AI assistant";
 
 export function AgentAvatar({
@@ -15,6 +17,11 @@ export function AgentAvatar({
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -29,6 +36,40 @@ export function AgentAvatar({
       document.body.style.overflow = previous;
     };
   }, [open]);
+
+  const lightbox =
+    open && mounted
+      ? createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Assistant photo"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-stone-950/80 p-4 sm:p-8"
+            onClick={() => setOpen(false)}
+          >
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close photo"
+              className="absolute right-4 top-4 z-[101] flex h-10 w-10 items-center justify-center rounded-full bg-white text-stone-800 shadow-md transition hover:bg-stone-100"
+            >
+              <XIcon className="h-5 w-5" />
+            </button>
+
+            <div
+              className="flex max-h-[90vh] w-full max-w-lg items-center justify-center overflow-hidden rounded-[1.75rem] bg-white p-3 shadow-2xl sm:p-5"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <img
+                src={AGENT_AVATAR_FULL_SRC}
+                alt={AGENT_AVATAR_ALT}
+                className="max-h-[min(80vh,36rem)] w-auto max-w-full rounded-2xl object-contain"
+              />
+            </div>
+          </div>,
+          document.body
+        )
+      : null;
 
   return (
     <>
@@ -48,31 +89,7 @@ export function AgentAvatar({
           className="h-full w-full object-cover object-top"
         />
       </button>
-
-      {open && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Assistant photo"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/70 p-4 backdrop-blur-sm"
-          onClick={() => setOpen(false)}
-        >
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            aria-label="Close photo"
-            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-stone-800 transition hover:bg-white"
-          >
-            <XIcon className="h-5 w-5" />
-          </button>
-          <img
-            src={AGENT_AVATAR_SRC}
-            alt={AGENT_AVATAR_ALT}
-            onClick={(event) => event.stopPropagation()}
-            className="max-h-[85vh] max-w-[min(90vw,28rem)] rounded-[2rem] object-contain shadow-2xl"
-          />
-        </div>
-      )}
+      {lightbox}
     </>
   );
 }
