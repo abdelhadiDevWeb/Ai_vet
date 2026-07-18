@@ -32,7 +32,9 @@ const corsOptions: cors.CorsOptions = {
     // allow same-origin / server-to-server / curl
     if (!origin) return callback(null, true);
     if (env.corsOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error("Not allowed by CORS"));
+    // Pass `false` (not an Error) so blocked origins get a proper CORS
+    // failure instead of a confusing 500 from the error handler.
+    return callback(null, false);
   },
   credentials: true,
 };
