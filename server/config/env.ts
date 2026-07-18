@@ -32,9 +32,10 @@ const envSchema = Joi.object({
   REDIS_URL: Joi.string().uri().optional(),
   REDIS_ENABLED: Joi.boolean().default(false),
 
-  // Groq AI (chat assistant). Vision-capable model so image uploads work.
+  // Groq AI (chat assistant). Qwen 3.6 supports vision (pet photo uploads).
+  // Llama 4 Scout was shut down on 2026-07-17 — do not use that model ID.
   GROQ_API_KEY: Joi.string().optional(),
-  GROQ_MODEL: Joi.string().default("meta-llama/llama-4-scout-17b-16e-instruct"),
+  GROQ_MODEL: Joi.string().default("qwen/qwen3.6-27b"),
 }).unknown(true);
 
 const { value, error } = envSchema.validate(process.env, {

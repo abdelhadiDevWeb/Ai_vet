@@ -187,6 +187,11 @@ apiRouter.post("/chat", chatUpload.array("files", 5), async (req, res, next) => 
 
     return res.status(200).json({ ok: true, reply });
   } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    // Surface Groq failures clearly instead of a generic Express 500.
+    if (message.startsWith("Groq API error") || message.includes("GROQ_API_KEY")) {
+      return res.status(502).json({ ok: false, message });
+    }
     return next(error);
   }
 });
