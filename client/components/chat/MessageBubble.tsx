@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import { FileTextIcon, PawIcon } from "../icons";
+import { FileTextIcon } from "../icons";
+import { AgentAvatar } from "./AgentAvatar";
 import { formatFileSize, type ChatMessage } from "./types";
 
 export function MessageBubble({ message }: { message: ChatMessage }) {
@@ -9,11 +10,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
 
   return (
     <div className={`message-in flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
-      {!isUser && (
-        <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-sm">
-          <PawIcon className="h-4.5 w-4.5" />
-        </div>
-      )}
+      {!isUser && <AgentAvatar />}
 
       <div className={`max-w-[85%] sm:max-w-[75%] ${isUser ? "items-end" : "items-start"} flex flex-col gap-2`}>
         {images.length > 0 && (
@@ -69,9 +66,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
 export function TypingIndicator() {
   return (
     <div className="message-in flex gap-3">
-      <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-sm">
-        <PawIcon className="h-4.5 w-4.5" />
-      </div>
+      <AgentAvatar />
       <div className="flex items-center gap-1.5 rounded-3xl rounded-bl-lg border border-black/5 bg-white px-4 py-3.5 shadow-sm dark:border-white/10 dark:bg-stone-900">
         <span className="typing-dot h-2 w-2 rounded-full bg-stone-400" />
         <span className="typing-dot h-2 w-2 rounded-full bg-stone-400" />

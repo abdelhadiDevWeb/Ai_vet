@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type DragEvent } from "react";
-import { ImageIcon, PawIcon, SparklesIcon } from "../icons";
+import { ImageIcon, SparklesIcon } from "../icons";
+import { AgentAvatar } from "./AgentAvatar";
 import { Composer } from "./Composer";
 import { MessageBubble, TypingIndicator } from "./MessageBubble";
 import {
@@ -224,9 +225,7 @@ export function Chat() {
         <div className="mx-auto w-full max-w-3xl px-4 py-6">
           {isEmpty ? (
             <div className="flex flex-col items-center pt-8 text-center sm:pt-16">
-              <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-600/25">
-                <PawIcon className="h-8 w-8" />
-              </div>
+              <AgentAvatar size={72} className="shadow-lg shadow-emerald-600/20" />
               <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
                 How can I help your pet today?
               </h1>
