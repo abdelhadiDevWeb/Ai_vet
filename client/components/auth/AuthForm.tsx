@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { PawIcon } from "../icons";
+import { AGENT_AVATAR_ALT, AGENT_AVATAR_SRC } from "../chat/AgentAvatar";
 import { API_URL } from "../../lib/api";
 
 type Mode = "register" | "login";
@@ -79,9 +79,16 @@ export function AuthForm({ mode }: { mode: Mode }) {
         <Link
           href="/"
           aria-label="PetCare AI home"
-          className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-600/20"
+          className="mx-auto block h-14 w-14 overflow-hidden rounded-full border border-emerald-200 shadow-lg shadow-emerald-600/20 dark:border-emerald-900"
         >
-          <PawIcon className="h-7 w-7" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={AGENT_AVATAR_SRC}
+            alt={AGENT_AVATAR_ALT}
+            width={56}
+            height={56}
+            className="h-full w-full object-cover object-top"
+          />
         </Link>
         <h1 className="mt-5 text-3xl font-semibold tracking-tight">
           {isRegister ? "Create your account" : "Welcome back"}

@@ -69,7 +69,7 @@ export function AgentAvatar({
             src={AGENT_AVATAR_SRC}
             alt={AGENT_AVATAR_ALT}
             onClick={(event) => event.stopPropagation()}
-            className="max-h-[85vh] max-w-[min(90vw,28rem)] rounded-3xl object-contain shadow-2xl"
+            className="max-h-[85vh] max-w-[min(90vw,28rem)] rounded-[2rem] object-contain shadow-2xl"
           />
         </div>
       )}
