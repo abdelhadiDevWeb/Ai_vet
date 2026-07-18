@@ -12,7 +12,9 @@ Guidelines:
 - You give general guidance, not a formal diagnosis; remind the owner of this when appropriate, without being repetitive.
 
 IMPORTANT — learn more about the animal:
-After answering, ALWAYS end your reply with 1-3 short follow-up questions to learn more about the animal (for example: species/breed, age, weight, sex, when symptoms started, appetite, vaccination status, diet). Ask only what is relevant and not already known from the conversation.`;
+After answering, ALWAYS end your reply with 1-3 short follow-up questions to learn more about the animal (for example: species/breed, age, weight, sex, when symptoms started, appetite, vaccination status, diet). Ask only what is relevant and not already known from the conversation.
+
+Never include internal reasoning, analysis steps, or XML/HTML tags like <think> in your reply. Reply with the final answer only.`;
 
 interface HistoryItem {
   role: "user" | "assistant";
@@ -80,6 +82,8 @@ export async function askVetAssistant(input: VetAssistantInput): Promise<string>
       messages,
       temperature: 0.6,
       max_completion_tokens: 1024,
+      // Qwen is a reasoning model; hide <think> blocks from the user-facing reply.
+      reasoning_format: "hidden",
     }),
   });
 
@@ -92,9 +96,17 @@ export async function askVetAssistant(input: VetAssistantInput): Promise<string>
     choices?: { message?: { content?: string } }[];
   };
 
-  const reply = data.choices?.[0]?.message?.content?.trim();
+  const reply = stripThinking(data.choices?.[0]?.message?.content ?? "");
   if (!reply) {
     throw new Error("Groq API returned an empty response");
   }
   return reply;
+}
+
+/** Remove leaked chain-of-thought tags some reasoning models still emit. */
+function stripThinking(content: string): string {
+  return content
+    .replace(/<think\b[^>]*>[\s\S]*?<\/think>/gi, "")
+    .replace(/^\s*<think\b[^>]*>[\s\S]*$/gi, "")
+    .trim();
 }
